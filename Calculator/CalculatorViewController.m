@@ -95,21 +95,22 @@
 
 - (IBAction)operationPressed:(UIButton *)sender {
     
-   
+    // If user triggers an operation before hitting Enter, fire it for them.
     if (self.userIsInTheMiddleOfEnteringANumber) {
         [self enterPressed];
     }
     
+    // Send current title to perform the requested operation and return the result as a double.
     double result = [self.brain performOperation:sender.currentTitle];
 
+    // If CE (Clear Everything) is pressed trigger clearDisplay, else log the current action in the status label.
     if ([sender.currentTitle isEqualToString:@"CE"]) {
-        // If CE (Clear Everything) is pressed trigger clearDisplay, else log the current action.
         [self clearDisplay];
     } else {
         [self printOperandToCalculatorLog:sender.currentTitle];        
     }
     
-
+    // Wraps double result in a string and print it out in the display
     NSString *resultString = [NSString stringWithFormat:@"%g", result];
     self.display.text = resultString;  
 }

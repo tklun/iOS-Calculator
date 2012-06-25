@@ -60,6 +60,8 @@
         result = sqrt([self popOperand]);
     } else if ([@"π" isEqualToString:operation]) {
         result = M_PI;
+    } else if ([@"CE" isEqualToString:operation]) {
+        [self.operandStack removeAllObjects];
     }
     
     [self pushOperand:result];

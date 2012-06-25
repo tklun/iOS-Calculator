@@ -49,6 +49,16 @@
 //    return hasDecimal;
 //}
 
+-(void)printDigitToCalculatorLog:(NSString *)currentAction {
+    self.status.text = [self.status.text stringByAppendingString:currentAction];
+}
+
+-(void)printOperandToCalculatorLog:(NSString *)currentAction {
+    NSString *spacer = @" ";
+    currentAction = [currentAction stringByAppendingString:spacer];
+    self.status.text = [self.status.text stringByAppendingString:currentAction];
+}
+
 - (void)presentDigitOnScreen:(NSString *)digit {
     if (self.userIsInTheMiddleOfEnteringANumber) {
         self.display.text = [self.display.text stringByAppendingString:digit];
@@ -56,6 +66,7 @@
         self.display.text = digit;
         self.userIsInTheMiddleOfEnteringANumber = YES;
     }
+    [self printDigitToCalculatorLog:digit];
 }
 
 - (IBAction)digitPressed:(UIButton *)sender {
@@ -78,24 +89,36 @@
 
 }
 
+- (IBAction)clearDisplay {
+    self.status.text = @"";
+}
+
 - (IBAction)operationPressed:(UIButton *)sender {
     
+   
     if (self.userIsInTheMiddleOfEnteringANumber) {
         [self enterPressed];
     }
     
     double result = [self.brain performOperation:sender.currentTitle];
+
+    if ([sender.currentTitle isEqualToString:@"CE"]) {
+        // If CE (Clear Everything) is pressed trigger clearDisplay, else log the current action.
+        [self clearDisplay];
+    } else {
+        [self printOperandToCalculatorLog:sender.currentTitle];        
+    }
+    
+
     NSString *resultString = [NSString stringWithFormat:@"%g", result];
-    self.display.text = resultString;
+    self.display.text = resultString;  
 }
 
 - (IBAction)enterPressed {
     [self.brain pushOperand:[self.display.text doubleValue]];
     self.userIsInTheMiddleOfEnteringANumber = NO;
+    
+    self.status.text = [self.status.text stringByAppendingString:(@" ")];
 }
 
-- (void)viewDidUnload {
-    [self setStatus:nil];
-    [super viewDidUnload];
-}
 @end

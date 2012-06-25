@@ -8,7 +8,6 @@
 
 #import "CalculatorBrain.h"
 
-
 @interface CalculatorBrain()
 
 @property (nonatomic, strong) NSMutableArray *operandStack;
@@ -20,8 +19,7 @@
 @synthesize operandStack = _operandStack;
 
 //  Overrides setter to ensure that it is never nil
-- (NSMutableArray *)operandStack
-{
+- (NSMutableArray *)operandStack {
     // Lazy instantiation
     if (_operandStack == nil) {
         _operandStack = [[NSMutableArray alloc] init];   
@@ -30,14 +28,12 @@
 }
 
 //  pushOperand takes a double and adds it to the operandStack as an double formatted as a number
-- (void)pushOperand:(double)operand
-{
+- (void)pushOperand:(double)operand {
     [self.operandStack addObject:[NSNumber numberWithDouble:operand]];
 }
 
 //  Finds the last item in the operandStack mutable array and sets it to operandObject. Removes last value from the array, if there is a value in the array.
-- (double)popOperand
-{
+- (double)popOperand {
     NSNumber *operandObject = [self.operandStack lastObject];
     if (operandObject) [self.operandStack removeLastObject];
     return [operandObject doubleValue];
@@ -45,8 +41,7 @@
 
 //  Does string comparisons (in two ways) in order to determine which operation to proceed with.
 
-- (double)performOperation:(NSString *)operation
-{
+- (double)performOperation:(NSString *)operation {
     double result = 0;
     
     if ([operation isEqualToString:@"+"]) {
@@ -58,11 +53,13 @@
     } else if ([@"-" isEqualToString:operation]) {
         result = [self popOperand] - [self popOperand];
     } else if ([@"sin" isEqualToString:operation]) {
-        //result = [self popOperand] - [self popOperand];
+        result = sin([self popOperand]);
     } else if ([@"cos" isEqualToString:operation]) {
-        //result = [self popOperand] - [self popOperand];
+        result = cos([self popOperand]);
     } else if ([@"sqrt" isEqualToString:operation]) {
-        //result = [self popOperand] - [self popOperand];
+        result = sqrt([self popOperand]);
+    } else if ([@"π" isEqualToString:operation]) {
+        result = M_PI;
     }
     
     [self pushOperand:result];

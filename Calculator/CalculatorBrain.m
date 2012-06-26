@@ -49,9 +49,13 @@
     } else if ([@"*" isEqualToString:operation]) {
         result = [self popOperand] * [self popOperand];
     } else if ([@"/" isEqualToString:operation]) {
-        result = [self popOperand] / [self popOperand];
+        double divisor = [self popOperand];
+        if (divisor) {
+            result = [self popOperand] / divisor;   
+        }
     } else if ([@"-" isEqualToString:operation]) {
-        result = [self popOperand] - [self popOperand];
+        double subtrahend = [self popOperand];
+        result = [self popOperand] - subtrahend;
     } else if ([@"sin" isEqualToString:operation]) {
         result = sin([self popOperand]);
     } else if ([@"cos" isEqualToString:operation]) {
